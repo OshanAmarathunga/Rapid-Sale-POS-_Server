@@ -15,11 +15,29 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
+    @Column(nullable = false)
+    private Integer age;
+
+    @Column(nullable = false,unique = true)
+    private Integer contactNumber;
+
+    @Column(nullable = false,unique = true)
+    private String nicNumber;
+
     @Column(unique = true)
     private String username;
 
     @Column(unique = true,nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String userRole;
 
 
 }
