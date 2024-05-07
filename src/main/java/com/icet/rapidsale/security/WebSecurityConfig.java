@@ -16,12 +16,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {
-    @Autowired
-    private AuthEntryPoint authEntryPoint;
+
 
     @Autowired
     private UserDetailServiceImpl userDetailService;
@@ -67,7 +67,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/***").permitAll()
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(authenticationJwtTokenFiler(), AuthTokenFiler.class);
+        http.addFilterBefore(authenticationJwtTokenFiler(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
