@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -23,8 +26,41 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto saveUser(UserDto dto) {
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        User userEntity=repository.save(mapper.convertValue(dto, User.class));
+        User userEntity = repository.save(mapper.convertValue(dto, User.class));
 
         return mapper.convertValue(userEntity, UserDto.class);
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> users = repository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+        for (User eachUser : users) {
+
+            userDtos.add(mapper.convertValue(eachUser, UserDto.class));
+        }
+        return userDtos;
+    }
+
+    @Override
+    public void deleteUser(int userId) {
+        User getDeleteUser = repository.findById(userId).orElse(null);
+        if (getDeleteUser != null) {
+            repository.delete(getDeleteUser);
+        }
+    }
+
+    @Override
+    public UserDto updateUser(UserDto dto) {
+        if (dto.getPassword() == null) {
+            User user = repository.findById(dto.getId()).orElse(null);
+            dto.setPassword(user.getPassword());
+            User updateUser = mapper.convertValue(dto, User.class);
+            return mapper.convertValue(repository.save(updateUser), UserDto.class);
+        }
+
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        User updateUser = mapper.convertValue(dto, User.class);
+        return mapper.convertValue(repository.save(updateUser), UserDto.class);
     }
 }
