@@ -15,10 +15,10 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    UserRepository repository;
+    private UserRepository repository;
 
     @Autowired
-    ObjectMapper mapper;
+    private ObjectMapper mapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -63,4 +63,12 @@ public class UserServiceImpl implements UserService {
         User updateUser = mapper.convertValue(dto, User.class);
         return mapper.convertValue(repository.save(updateUser), UserDto.class);
     }
+
+    @Override
+    public UserDto getUserByUsername(String username) {
+       User user=repository.findByUsername(username).orElse(null);
+       return mapper.convertValue(user,UserDto.class);
+    }
+
+
 }

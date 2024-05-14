@@ -47,8 +47,15 @@ public class UserController {
        return userDto==null?ResponseEntity.status(404).body(null):ResponseEntity.status(200).body(userDto);
     }
 
+    @GetMapping("/user/{username}")
+    ResponseEntity<UserDto> getUserByUsername(@PathVariable String username){
+       UserDto dto= userService.getUserByUsername(username);
+       return dto==null?ResponseEntity.status(404).body(null):ResponseEntity.status(200).body(dto);
+    }
+
     private String extractDuplicateValue(String exceptionMessage) {
-        return exceptionMessage.substring(exceptionMessage.indexOf("Duplicate entry '") + 17, exceptionMessage.lastIndexOf("' for key"));
+        return exceptionMessage.substring(exceptionMessage.indexOf("Duplicate entry '") + 17,
+                exceptionMessage.lastIndexOf("' for key"));
     }
 
 }
